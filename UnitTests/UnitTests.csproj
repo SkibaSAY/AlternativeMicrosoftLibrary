@@ -53,6 +53,7 @@
     <Compile Include="AvlTree\Find_Contains.cs" />
     <Compile Include="AvlTree\Balance.cs" />
     <Compile Include="AvlTree\Remove.cs" />
+    <Compile Include="HashTable\Add_Remove.cs" />
     <Compile Include="_Queue\Count.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_Queue\EnlargeSize.cs" />
@@ -69,6 +70,7 @@
       <Name>AlternativeMicrosoftGenericLibrary</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

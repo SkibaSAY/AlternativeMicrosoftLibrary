@@ -41,6 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HashTable\ChainHashTable.cs" />
+    <Compile Include="HashTable\GetPrimeNumber.cs" />
+    <Compile Include="HashTable\HashMaker.cs" />
+    <Compile Include="HashTable\Interfaces.cs" />
+    <Compile Include="HashTable\KeyValuePair.cs" />
+    <Compile Include="HashTable\OpenAddressHashTable.cs" />
     <Compile Include="_AvlBinaryTree\AvlTree.cs" />
     <Compile Include="_Queue\_InvalidOperationException.cs" />
     <Compile Include="_Queue\_Queue.cs" />
