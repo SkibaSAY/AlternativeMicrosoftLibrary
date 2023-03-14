@@ -39,7 +39,7 @@ namespace HashTableForStudents
                 int iterationNumber = 1;
                 while (true) 
                 {
-                    var place = (hash + iterationNumber * (1 + _hashMaker2.ReturnHash(key))) % _capacity;
+                    var place = CalculateSquareHash(hash, iterationNumber) % _capacity;
                     if (TryToPut(place, key, value))
                         break;
                     iterationNumber++;
@@ -81,7 +81,7 @@ namespace HashTableForStudents
             int iterationNumber = 1;
             while (true)
             {
-                var place = (hash + iterationNumber * (1 + _hashMaker2.ReturnHash(x))) % _capacity;
+                var place = CalculateSquareHash(hash,iterationNumber) % _capacity;
                 if (_table[place] == null)
                     return null;
                 if (!_table[place].IsDeleted() && _table[place].Key.Equals(x))
@@ -111,6 +111,16 @@ namespace HashTableForStudents
                 pair.Value = value;
             }
         }
+
+        #region SquareHash
+        private static double c1 = 0.5;
+        private static double c2 = 0.5;
+        private int CalculateSquareHash(int hash,int iterationNumber)
+        {
+            var squareHash = (int)(hash + c1*iterationNumber +c2* iterationNumber* iterationNumber);
+            return squareHash;
+        }
+        #endregion
 
         private void IncreaseTable()
         {

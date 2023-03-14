@@ -54,6 +54,7 @@
     <Compile Include="AvlTree\Balance.cs" />
     <Compile Include="AvlTree\Remove.cs" />
     <Compile Include="HashTable\Add_Remove.cs" />
+    <Compile Include="HashTable\Contains.cs" />
     <Compile Include="_Queue\Count.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_Queue\EnlargeSize.cs" />
