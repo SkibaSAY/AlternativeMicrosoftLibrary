@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using AlternativeMicrosoftGenericLibrary;
+using HashTableForStudents;
 
 namespace _1.Queue
 {
@@ -12,7 +13,8 @@ namespace _1.Queue
         static void Main(string[] args)
         {
             //QueueTestPerformance();
-            AvlTreeTestPerformance();
+            //AvlTreeTestPerformance();
+            HashTestPerformance();
         }
 
         #region _Queue
@@ -142,6 +144,73 @@ namespace _1.Queue
             foreach (var item in addList) avl.Add(item.key, item.value);
             foreach (var item in addList) avl.Remove(item.key);
             foreach (var item in addList) avl.Contains(item.key);
+
+            stopWatch.Stop();
+            return stopWatch.Elapsed;
+        }
+        #endregion
+
+        #region Hash
+        static void HashTestPerformance()
+        {
+            var leftRandomBorber = -100000000;
+            var rightRandomBorder = 100000000;
+
+            var countAdd = 15000;
+            var countDelete = 5000;
+
+            var addList = new List<(string key, int value)>();
+            var random = new Random();
+
+            for (var i = 0; i < countAdd; i++)
+            {
+                var applicant = random.Next(leftRandomBorber, rightRandomBorder);
+                if (addList.Contains((applicant.ToString(), applicant)))
+                {
+                    i--;
+                    continue;
+                }
+                addList.Add((applicant.ToString(), applicant));
+                //addList.Add((i, i));
+            }
+
+            var removeList = new List<(string key, int value)>();
+            for (var i = countDelete; i < countDelete * 2; i++)
+            {
+                removeList.Add(addList[i]);
+            }
+
+            var microsoftResult = DictTest(addList, removeList);
+            Console.WriteLine($"Microsoft: {microsoftResult}");
+
+            var alternativeResult = HashSetTest(addList, removeList);
+            Console.WriteLine($"Alternative: {alternativeResult}");
+            Console.ReadLine();
+        }
+
+        public static TimeSpan HashSetTest(List<(string key, int value)> addList, List<(string key, int value)> removeList)
+        {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var hashTable = new OpenAddressHashTable<string, int>();
+
+            foreach (var item in addList) hashTable.Add(item.key, item.value);
+            foreach (var item in removeList) hashTable.Remove(item.key);
+            foreach (var item in addList) hashTable.ContainsKey(item.key);
+
+            stopWatch.Stop();
+            return stopWatch.Elapsed;
+        }
+
+        public static TimeSpan DictTest(List<(string key, int value)> addList, List<(string key, int value)> removeList)
+        {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var dict = new Dictionary<string, int>();
+
+            foreach (var item in addList) dict.Add(item.key, item.value);
+            foreach (var item in removeList) dict.Remove(item.key);
+            foreach (var item in addList) dict.ContainsKey(item.key);
 
             stopWatch.Stop();
             return stopWatch.Elapsed;

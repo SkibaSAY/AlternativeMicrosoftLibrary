@@ -29,33 +29,33 @@ namespace UnitTests.HashTable
         [TestMethod]
         public void Add100ItemsAndContainsAndRemoveThey()
         {
-            var hashTable = new OpenAddressHashTable<string, int>();
+            var hashTable = new OpenAddressHashTable<int, int>();
 
             var count = 100;
             for (var i = 0; i < count; i++)
             {
-                hashTable.Add(i.ToString(), i);
+                hashTable.Add(i, i);
             }
             Assert.AreEqual(hashTable.Count, count);
             for (var i = 0; i < count; i++)
             {
-                var isContains = hashTable.ContainsKey(i.ToString());
+                var isContains = hashTable.ContainsKey(i);
                 Assert.AreEqual(isContains, true);
             }
             for (var i = 0; i < count; i++)
             {
-                hashTable.Remove(i.ToString());
+                hashTable.Remove(i);
             }
             for (var i = 0; i < count; i++)
             {
-                var isContains = hashTable.ContainsKey(i.ToString());
+                var isContains = hashTable.ContainsKey(i);
                 Assert.AreEqual(isContains, false);
             }
             Assert.AreEqual(hashTable.Count, 0);
         }
 
         [TestMethod]
-        public void Test()
+        public void TestNegativeKeys1()
         {
             var hashTable = new OpenAddressHashTable<string, int>();
             var items = "17608,-99110,-13754,59765,81869,-6376,-31307,39710,-8183,-6393".Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -72,10 +72,27 @@ namespace UnitTests.HashTable
             }
         }
         [TestMethod]
-        public void Test1()
+        public void TestNegativeKeys2()
         {
             var hashTable = new OpenAddressHashTable<string, int>();
             var items = "67945,-53542,62958,77960,45407,26837,25681,87882,-87349".Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var item in items)
+            {
+                try
+                {
+                    hashTable.Add(item, 1);
+                }
+                catch (Exception ex)
+                {
+                    Assert.Fail();
+                }
+            }
+        }
+        [TestMethod]
+        public void TestPolochitelKeys()
+        {
+            var hashTable = new OpenAddressHashTable<string, int>();
+            var items = "17608,99110,13754,59765,81869,6376,31307,39710,8183,6393".Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var item in items)
             {
                 try
@@ -134,6 +151,15 @@ namespace UnitTests.HashTable
                 Assert.AreEqual(isContains, false);
             }
             Assert.AreEqual(hashTable.Count, 0);
+        }
+        [TestMethod]
+        public void FullRandomTest()
+        {
+            var count = 1000;
+            for(var i = 0; i < count; i++)
+            {
+                Random1000Items();
+            }
         }
     }
 }
