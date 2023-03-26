@@ -47,10 +47,13 @@
     <Compile Include="HashTable\Interfaces.cs" />
     <Compile Include="HashTable\KeyValuePair.cs" />
     <Compile Include="HashTable\OpenAddressHashTable.cs" />
+    <Compile Include="SkipList\Node.cs" />
+    <Compile Include="SkipList\SkipListLib.cs" />
     <Compile Include="_AvlBinaryTree\AvlTree.cs" />
     <Compile Include="_Queue\_InvalidOperationException.cs" />
     <Compile Include="_Queue\_Queue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

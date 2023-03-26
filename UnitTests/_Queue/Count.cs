@@ -2,7 +2,7 @@
 using System;
 using AlternativeMicrosoftGenericLibrary;
 
-namespace UnitTests
+namespace Queue
 {
     [TestClass]
     public class Count
