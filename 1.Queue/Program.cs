@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using AlternativeMicrosoftGenericLibrary;
 using HashTableForStudents;
+using SkipList;
 
 namespace _1.Queue
 {
@@ -14,7 +15,8 @@ namespace _1.Queue
         {
             //QueueTestPerformance();
             //AvlTreeTestPerformance();
-            HashTestPerformance();
+            //HashTestPerformance();
+            SkipListTestPerformance();
         }
 
         #region _Queue
@@ -109,7 +111,7 @@ namespace _1.Queue
             }
 
             var removeList = new List<(string key, int value)>();
-            for (var i = countDelete; i < countDelete * 2; i++)
+            for (var i = countDelete; i < countDelete*2; i++)
             {
                 removeList.Add(addList[i]);
             }
@@ -142,7 +144,7 @@ namespace _1.Queue
             var avl = new AvlTree<string, int>();
 
             foreach (var item in addList) avl.Add(item.key, item.value);
-            foreach (var item in addList) avl.Remove(item.key);
+            foreach (var item in removeList) avl.Remove(item.key);
             foreach (var item in addList) avl.Contains(item.key);
 
             stopWatch.Stop();
@@ -215,6 +217,73 @@ namespace _1.Queue
             stopWatch.Stop();
             return stopWatch.Elapsed;
         }
+        #endregion
+
+        #region SkipList
+        static void SkipListTestPerformance()
+        {
+            var leftRandomBorber = -100000;
+            var rightRandomBorder = 100000;
+
+            var countAdd = 20000;
+            var countDelete = 5000;
+
+            var addList = new List<(int key, int value)>();
+            var random = new Random();
+
+            for (var i = 0; i < countAdd; i++)
+            {
+                var applicant = random.Next(leftRandomBorber, rightRandomBorder);
+                if (addList.Contains((applicant, applicant)))
+                {
+                    i--;
+                    continue;
+                }
+                addList.Add((applicant, applicant));
+            }
+
+            var removeList = new List<(int key, int value)>();
+            for (var i = countDelete; i < countDelete * 2; i++)
+            {
+                removeList.Add(addList[i]);
+            }
+
+            var microsoftResult = SortedListTest(addList, removeList);
+            Console.WriteLine($"Microsoft: {microsoftResult}");
+
+            var alternativeResult = SkipListTest(addList, removeList);
+            Console.WriteLine($"Alternative: {alternativeResult}");
+            Console.ReadLine();
+        }
+
+
+        public static TimeSpan SortedListTest(List<(int key, int value)> addList, List<(int key, int value)> removeList)
+        {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var dict = new SortedList<int, int>();
+
+            foreach (var item in addList) dict.Add(item.key, item.value);
+            foreach (var item in removeList) dict.Remove(item.key);
+            foreach (var item in addList) dict.ContainsKey(item.key);
+
+            stopWatch.Stop();
+            return stopWatch.Elapsed;
+        }
+
+        public static TimeSpan SkipListTest(List<(int key, int value)> addList, List<(int key, int value)> removeList)
+        {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var skipList = new SkipList<int, int>();
+
+            foreach (var item in addList) skipList.Add(item.key, item.value);
+            foreach (var item in removeList) skipList.Remove(item.key);
+            foreach (var item in addList) skipList.Contains(item.key);
+
+            stopWatch.Stop();
+            return stopWatch.Elapsed;
+        }       
         #endregion
     }
 }

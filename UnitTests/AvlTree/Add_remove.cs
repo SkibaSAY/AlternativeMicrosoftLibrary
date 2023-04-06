@@ -93,5 +93,35 @@ namespace UnitTests.AvlTree
             Assert.AreEqual(root.rightChild.value, "10");
         }
 
+        [TestMethod]
+        public void TestSortedPoryadok()
+        {
+            var aArr = new int[]
+            {
+                7,3,5,4,44,22,17,12,20,15,6,23
+            };
+            var avl = new AvlTree<int, int>();
+            foreach(var item in aArr)
+            {
+                avl.Add(item, item);
+            }
+
+            var bArr = new int[aArr.Length / 2];
+            var j = 0;
+            for(var i = 0; i < aArr.Length; i += 2,j++)
+            {
+                avl.Remove(aArr[i]);
+                bArr[j] = aArr[i + 1];
+            }
+            Array.Sort(bArr);
+
+            j = 0;
+            var avlItems = avl.GetItems();
+            foreach(var item in avlItems)
+            {
+                Assert.AreEqual(bArr[j], item.key);
+                j++;
+            }
+        }
     }
 }

@@ -149,6 +149,38 @@ namespace AlternativeMicrosoftGenericLibrary
             BalanceTree(newNode.parrent);
         }
 
+        public IEnumerable<(TKey key, TValue value)> GetItems()
+        {
+            var result = new List<TreeNode<TKey, TValue>>();
+
+            var stack = new Stack<(TreeNode<TKey, TValue> node,int state)>();
+            stack.Push((_root, 0));
+            while (stack.Count != 0)
+            {
+                var current = stack.Pop();
+                if (current.state == 0)
+                {
+                    current.state = 1;
+                    if (current.node.rightChild != null)
+                    {
+                        stack.Push((current.node.rightChild, 0));
+                    }
+                    
+                    stack.Push(current);
+                    if (current.node.leftChild != null)
+                    {
+                        stack.Push((current.node.leftChild, 0));
+                    }
+                }
+                else
+                {
+                    result.Add(current.node);
+                }
+            }
+            var res = result.Select(x => (x.key, x.value)).ToArray();
+            return res;
+        }
+
         public void Remove(TKey searchedKey)
         {
             var searchedNode = FindNode(searchedKey);

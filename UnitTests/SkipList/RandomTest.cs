@@ -3,7 +3,7 @@ using SkipList;
 using System;
 using System.Collections.Generic;
 
-namespace UnitTests.SkipList
+namespace SkipList
 {
     [TestClass]
     public class RandomTest
@@ -38,7 +38,10 @@ namespace UnitTests.SkipList
 
                 for (int i = 0; i < n; i++)
                 {
-                    skipList.Remove(nums[i]);
+                    while (skipList.Remove(nums[i]))
+                    {
+
+                    }
                     var result = skipList.Contains(nums[i]);
                     Assert.AreEqual(false, result);
                 }
