@@ -16,7 +16,8 @@ namespace _1.Queue
             //QueueTestPerformance();
             //AvlTreeTestPerformance();
             //HashTestPerformance();
-            SkipListTestPerformance();
+            //SkipListTestPerformanceWhereTKeyIsInt();
+            SkipListTestPerformanceWhereTKeyIsIntToString();
         }
 
         #region _Queue
@@ -220,7 +221,7 @@ namespace _1.Queue
         #endregion
 
         #region SkipList
-        static void SkipListTestPerformance()
+        static void SkipListTestPerformanceWhereTKeyIsInt()
         {
             var leftRandomBorber = -100000;
             var rightRandomBorder = 100000;
@@ -255,13 +256,48 @@ namespace _1.Queue
             Console.WriteLine($"Alternative: {alternativeResult}");
             Console.ReadLine();
         }
+        static void SkipListTestPerformanceWhereTKeyIsIntToString()
+        {
+            var leftRandomBorber = -100000;
+            var rightRandomBorder = 100000;
 
+            var countAdd = 20000;
+            var countDelete = 5000;
 
-        public static TimeSpan SortedListTest(List<(int key, int value)> addList, List<(int key, int value)> removeList)
+            var addList = new List<(string key, int value)>();
+            var random = new Random();
+
+            for (var i = 0; i < countAdd; i++)
+            {
+                var applicant = random.Next(leftRandomBorber, rightRandomBorder);
+                if (addList.Contains((applicant.ToString(), applicant)))
+                {
+                    i--;
+                    continue;
+                }
+                addList.Add((applicant.ToString(), applicant));
+            }
+
+            var removeList = new List<(string key, int value)>();
+            for (var i = countDelete; i < countDelete * 2; i++)
+            {
+                removeList.Add(addList[i]);
+            }
+
+            var microsoftResult = SortedListTest(addList, removeList);
+            Console.WriteLine($"Microsoft: {microsoftResult}");
+
+            var alternativeResult = SkipListTest(addList, removeList);
+            Console.WriteLine($"Alternative: {alternativeResult}");
+            Console.ReadLine();
+        }
+
+        public static TimeSpan SortedListTest<TKey, TValue>(List<(TKey key, TValue value)> addList, List<(TKey key, TValue value)> removeList)
+            where TKey : IComparable<TKey>
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            var dict = new SortedList<int, int>();
+            var dict = new SortedList<TKey, TValue>();
 
             foreach (var item in addList) dict.Add(item.key, item.value);
             foreach (var item in removeList) dict.Remove(item.key);
@@ -271,11 +307,12 @@ namespace _1.Queue
             return stopWatch.Elapsed;
         }
 
-        public static TimeSpan SkipListTest(List<(int key, int value)> addList, List<(int key, int value)> removeList)
+        public static TimeSpan SkipListTest<TKey,TValue>(List<(TKey key, TValue value)> addList, List<(TKey key, TValue value)> removeList) 
+            where TKey:IComparable<TKey>
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
-            var skipList = new SkipList<int, int>();
+            var skipList = new SkipList<TKey, TValue>();
 
             foreach (var item in addList) skipList.Add(item.key, item.value);
             foreach (var item in removeList) skipList.Remove(item.key);
