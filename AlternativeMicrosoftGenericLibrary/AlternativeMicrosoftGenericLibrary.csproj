@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Heap\Heap.cs" />
+    <Compile Include="Heap\IHeap.cs" />
     <Compile Include="HashTable\ChainHashTable.cs" />
     <Compile Include="HashTable\GetPrimeNumber.cs" />
     <Compile Include="HashTable\HashMaker.cs" />
