@@ -15,9 +15,9 @@ namespace _1.Queue
         {
             //QueueTestPerformance();
             //AvlTreeTestPerformance();
-            //HashTestPerformance();
+            HashTestPerformance();
             //SkipListTestPerformanceWhereTKeyIsInt();
-            SkipListTestPerformanceWhereTKeyIsIntToString();
+            //SkipListTestPerformanceWhereTKeyIsIntToString();
         }
 
         #region _Queue
@@ -223,10 +223,10 @@ namespace _1.Queue
         #region SkipList
         static void SkipListTestPerformanceWhereTKeyIsInt()
         {
-            var leftRandomBorber = -100000;
-            var rightRandomBorder = 100000;
+            var leftRandomBorber = -10000000;
+            var rightRandomBorder = 10000000;
 
-            var countAdd = 20000;
+            var countAdd = 100000;
             var countDelete = 5000;
 
             var addList = new List<(int key, int value)>();
@@ -234,7 +234,7 @@ namespace _1.Queue
 
             for (var i = 0; i < countAdd; i++)
             {
-                var applicant = random.Next(leftRandomBorber, rightRandomBorder);
+                var applicant = random.Next();
                 if (addList.Contains((applicant, applicant)))
                 {
                     i--;
@@ -250,10 +250,10 @@ namespace _1.Queue
             }
 
             var microsoftResult = SortedListTest(addList, removeList);
-            Console.WriteLine($"Microsoft: {microsoftResult}");
+            Console.WriteLine($"Microsoft: {microsoftResult.Milliseconds}");
 
             var alternativeResult = SkipListTest(addList, removeList);
-            Console.WriteLine($"Alternative: {alternativeResult}");
+            Console.WriteLine($"Alternative: {alternativeResult.Milliseconds}");
             Console.ReadLine();
         }
         static void SkipListTestPerformanceWhereTKeyIsIntToString()
@@ -285,10 +285,10 @@ namespace _1.Queue
             }
 
             var microsoftResult = SortedListTest(addList, removeList);
-            Console.WriteLine($"Microsoft: {microsoftResult}");
+            Console.WriteLine($"Microsoft: {microsoftResult.Milliseconds}");
 
             var alternativeResult = SkipListTest(addList, removeList);
-            Console.WriteLine($"Alternative: {alternativeResult}");
+            Console.WriteLine($"Alternative: {alternativeResult.Milliseconds}");
             Console.ReadLine();
         }
 
