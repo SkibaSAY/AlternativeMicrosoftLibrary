@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using AlternativeMicrosoftGenericLibrary;
 using HashTableForStudents;
 using SkipList;
@@ -15,7 +17,8 @@ namespace _1.Queue
         {
             //QueueTestPerformance();
             //AvlTreeTestPerformance();
-            HashTestPerformance();
+            //HashTestPerformance();
+            HashTableTestPerformance();
             //SkipListTestPerformanceWhereTKeyIsInt();
             //SkipListTestPerformanceWhereTKeyIsIntToString();
         }
@@ -154,6 +157,37 @@ namespace _1.Queue
         #endregion
 
         #region Hash
+
+        static Regex wordRegex = new Regex(@"\w+");
+        static void HashTableTestPerformance()
+        {
+            var input = File.ReadAllText("input1.txt");
+            var matches = wordRegex.Matches(input);
+
+            var dict = new Dictionary<string, int>();
+            foreach (Match match in matches)
+            {
+                var word = match.Value;
+                if (dict.ContainsKey(word))
+                {
+                    dict[word]++;
+                }
+                else
+                {
+                    dict.Add(word, 1);
+                }
+            }
+            var popularWords = dict.ToArray().OrderByDescending(w => w.Value).ToList();
+            var addWords = popularWords.Select(w=>(w.Key,w.Value)).ToList();
+            var removeWords = addWords.Where(w=>w.Value>27).ToList();
+
+            var microsoftResult = DictTest(addWords, removeWords);
+            Console.WriteLine($"Microsoft: {microsoftResult}");
+
+            var alternativeResult = HashSetTest(addWords, removeWords);
+            Console.WriteLine($"Alternative: {alternativeResult}");
+            Console.ReadLine();
+        }
         static void HashTestPerformance()
         {
             var leftRandomBorber = -100000000;

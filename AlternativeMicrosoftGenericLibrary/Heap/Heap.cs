@@ -32,7 +32,6 @@ namespace AlternativeMicrosoftGenericLibrary
 
             Heapify(newIndex);
 
-
             if (newIndex == _capacity - 1)
             {
                 IncreaseCapacity();
