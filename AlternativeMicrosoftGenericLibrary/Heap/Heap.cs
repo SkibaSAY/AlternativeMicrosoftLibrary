@@ -57,7 +57,7 @@ namespace AlternativeMicrosoftGenericLibrary
             while (isNotRoot)
             {
                 if (current == 0) isNotRoot = false;
-                HeapifyLoop(index);
+                HeapifyLoop(current);
                 current = GetParrentIndex(current);
             }
         }
@@ -87,11 +87,9 @@ namespace AlternativeMicrosoftGenericLibrary
                 {
                     maxValueIndex = currChildIndex;
                 }
-                if (maxValueIndex == index) return;
-
-                Swap(index, maxValueIndex);
             }
-
+            if (maxValueIndex == index) return;
+            Swap(index, maxValueIndex);
         }
 
         private void Swap(int indexA,int indexB)
@@ -109,6 +107,15 @@ namespace AlternativeMicrosoftGenericLibrary
         public void FindMax()
         {
             throw new NotImplementedException();
+        }
+
+        public IEnumerable<TItem> GetHeapItems()
+        {
+            return _items;
+        }
+        public static bool IsHeap(IEnumerable<TItem> heap,int childCount)
+        {
+            var 
         }
     }
 }

@@ -19,5 +19,19 @@ namespace Heap
             }
             Assert.AreEqual(count, heap.Count);
         }
+
+        [TestMethod]
+        public void TestHeapify()
+        {
+            var heap = new Heap<int>(Comparer<int>.Default);
+            var items = new int[] { 1, 5, 2, 17, 18, 7, 6, 2 };
+            foreach(var item in items)
+            {
+                heap.Add(item);
+            }
+
+            var heapItems = heap.GetHeapItems();
+
+        }
     }
 }
