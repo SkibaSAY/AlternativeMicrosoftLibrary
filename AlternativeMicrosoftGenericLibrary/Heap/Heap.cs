@@ -7,14 +7,17 @@ using System.Threading.Tasks;
 namespace AlternativeMicrosoftGenericLibrary
 {
     public class Heap<TItem>: IHeap<TItem>
+        where TItem: IComparable<TItem>
     {
         private int _capacity = 4;
         private int _childsCount;
         private IComparer<TItem> _comparer;
         private TItem[] _items;
 
-        public Heap(IComparer<TItem> comparer,int childsCount = 2)
+        public Heap(IComparer<TItem> comparer = null,int childsCount = 2)
         {
+            if (comparer == null) comparer = Comparer<TItem>.Default;
+
             if (childsCount < 2) throw new ArgumentException("childsCount cannot be less 2");
 
             this._childsCount = childsCount;
@@ -98,9 +101,12 @@ namespace AlternativeMicrosoftGenericLibrary
         public void RemoveMax()
         {
             if (Count == 0) throw new ArgumentException("Heap is Empty!");
+            Count--;
             var temp = _items;
             _items = new TItem[_capacity];
             Array.Copy(temp, 1, _items, 0, Count);
+            //потому, что мы не знаем
+            Heapify(Count/2);
         }
 
         public TItem FindMax()
@@ -144,6 +150,55 @@ namespace AlternativeMicrosoftGenericLibrary
             _items = tempItems;
 
             return sortedArray;
+        }
+
+        /// <summary>
+        /// Обьединяет несколько отсортированных массивов в один отсортированный массив
+        /// </summary>
+        public static List<TItem> SortSeveralSortedList(List<TItem[]> arrays,IComparer<TItem> comparer = null)
+        {
+            var result = new List<TItem>();
+
+            if (comparer == null) comparer = Comparer<TItem>.Default;
+
+            var resourses = new(TItem[] arr,int nextIndex)[arrays.Count];
+
+            //создаём кучу со своим компаратором
+            var heap = new Heap<(TItem value,int arrIndex)>(
+                comparer:Comparer<(TItem value, int arrIndex)>
+                .Create(
+                    (x,y)=> { return (-1)*comparer.Compare(x.value,y.value); } // тк куча максимальная
+                    )
+                );
+
+            //предподготовка
+            for(var i = 0; i < arrays.Count; i++)
+            {
+                var arr = arrays[i];
+                if (arr.Length != 0)
+                {
+                    heap.Add((value: arr[0],i));
+                    resourses[i] = (arr: arr, nextIndex: 1);
+                }
+            }
+
+            //основной цикл
+            while(heap.Count > 0)
+            {
+                var current = heap.FindMax();
+                result.Add(current.value);
+
+                heap.RemoveMax();
+                var resourse = resourses[current.arrIndex];
+                if(resourse.nextIndex < resourse.arr.Length)
+                {
+                    var newItem = resourse.arr[resourse.nextIndex];
+                    resourses[current.arrIndex].nextIndex++;
+                    heap.Add((newItem, current.arrIndex));
+                }
+            }
+
+            return result;
         }
     }
 }

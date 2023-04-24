@@ -59,5 +59,23 @@ namespace Heap
                 Assert.AreEqual(items[i], sortedItems[i]);
             }
         }
+
+        [TestMethod]
+        public void TestSortSeveralSortedLists()
+        {
+            var severalSortedLists = new List<int[]>{
+                new int[] { 1,21,31 },
+                new int[] { 23,25,37 },
+                new int[] { 1,2,3 },
+            };
+
+            var result = Heap<int>.SortSeveralSortedList(severalSortedLists);
+
+            var sortedItems = severalSortedLists.SelectMany(arr => arr).OrderBy(x => x).ToList();
+            for (var i = 0; i < sortedItems.Count; i++)
+            {
+                Assert.AreEqual(sortedItems[i], result[i]);
+            }
+        }
     }
 }
