@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Heap
 {
@@ -32,6 +33,15 @@ namespace Heap
 
             var heapItems = heap.GetHeapItems();
 
+            var expected = new int[] { 18, 17, 7, 2, 5, 2, 6, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+            var a = 0;
+            Assert.AreEqual(expected.Length, heapItems.Count());
+            foreach(var item in heapItems)
+            {
+                Assert.AreEqual(expected[a], item);
+                a++;
+            }
         }
+
     }
 }

@@ -178,76 +178,89 @@ namespace _1.Queue
                 }
             }
             var popularWords = dict.ToArray().OrderByDescending(w => w.Value).ToList();
-            var addWords = popularWords.Select(w=>(w.Key,w.Value)).ToList();
+            var addWords = popularWords.Select(w=>new KeyValuePair<string,int>(w.Key,w.Value)).ToList();
             var removeWords = addWords.Where(w=>w.Value>27).ToList();
 
-            var microsoftResult = DictTest(addWords, removeWords);
-            Console.WriteLine($"Microsoft: {microsoftResult}");
+            var count = 300;
+            var microsoftSum = 0;
+            var alternativeSum = 0;
 
-            var alternativeResult = HashSetTest(addWords, removeWords);
-            Console.WriteLine($"Alternative: {alternativeResult}");
+
+            for(var i = 0; i < count; i++)
+            {
+                var microsoftResult = DictTest(addWords, removeWords).Milliseconds;
+                Console.WriteLine($"Microsoft: {microsoftResult}");
+
+                var alternativeResult = HashSetTest(addWords, removeWords).Milliseconds;
+                Console.WriteLine($"Alternative: {alternativeResult}");
+
+                microsoftSum += microsoftResult;
+                alternativeSum += alternativeResult;
+            }
+            Console.WriteLine(alternativeSum*1.0/microsoftSum);
+
             Console.ReadLine();
         }
-        static void HashTestPerformance()
-        {
-            var leftRandomBorber = -100000000;
-            var rightRandomBorder = 100000000;
+        //static void HashTestPerformance()
+        //{
+        //    var leftRandomBorber = -100000000;
+        //    var rightRandomBorder = 100000000;
 
-            var countAdd = 15000;
-            var countDelete = 5000;
+        //    var countAdd = 15000;
+        //    var countDelete = 5000;
 
-            var addList = new List<(string key, int value)>();
-            var random = new Random();
+        //    var addList = new List<(string key, int value)>();
+        //    var random = new Random();
 
-            for (var i = 0; i < countAdd; i++)
-            {
-                var applicant = random.Next(leftRandomBorber, rightRandomBorder);
-                if (addList.Contains((applicant.ToString(), applicant)))
-                {
-                    i--;
-                    continue;
-                }
-                addList.Add((applicant.ToString(), applicant));
-                //addList.Add((i, i));
-            }
+        //    for (var i = 0; i < countAdd; i++)
+        //    {
+        //        var applicant = random.Next(leftRandomBorber, rightRandomBorder);
+        //        if (addList.Contains((applicant.ToString(), applicant)))
+        //        {
+        //            i--;
+        //            continue;
+        //        }
+        //        addList.Add((applicant.ToString(), applicant));
+        //        //addList.Add((i, i));
+        //    }
 
-            var removeList = new List<(string key, int value)>();
-            for (var i = countDelete; i < countDelete * 2; i++)
-            {
-                removeList.Add(addList[i]);
-            }
+        //    var removeList = new List<(string key, int value)>();
+        //    for (var i = countDelete; i < countDelete * 2; i++)
+        //    {
+        //        removeList.Add(addList[i]);
+        //    }
 
-            var microsoftResult = DictTest(addList, removeList);
-            Console.WriteLine($"Microsoft: {microsoftResult}");
+        //    var microsoftResult = DictTest(addList, removeList);
+        //    Console.WriteLine($"Microsoft: {microsoftResult}");
 
-            var alternativeResult = HashSetTest(addList, removeList);
-            Console.WriteLine($"Alternative: {alternativeResult}");
-            Console.ReadLine();
-        }
+        //    var alternativeResult = HashSetTest(addList, removeList);
+        //    Console.WriteLine($"Alternative: {alternativeResult}");
+        //    Console.ReadLine();
+        //}
 
-        public static TimeSpan HashSetTest(List<(string key, int value)> addList, List<(string key, int value)> removeList)
+        public static TimeSpan HashSetTest(List<KeyValuePair<string, int>> addList, List<KeyValuePair<string, int>> removeList)
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
             var hashTable = new OpenAddressHashTable<string, int>();
 
-            foreach (var item in addList) hashTable.Add(item.key, item.value);
-            foreach (var item in removeList) hashTable.Remove(item.key);
-            foreach (var item in addList) hashTable.ContainsKey(item.key);
+            foreach (var item in addList) hashTable.Add(item.Key, item.Value);
+            foreach (var item in removeList) hashTable.Remove(item.Key);
+            foreach (var item in addList) hashTable.ContainsKey(item.Key);
 
             stopWatch.Stop();
             return stopWatch.Elapsed;
         }
 
-        public static TimeSpan DictTest(List<(string key, int value)> addList, List<(string key, int value)> removeList)
+        public static TimeSpan DictTest(List<KeyValuePair<string,int>> addList, List<KeyValuePair<string, int>> removeList)
         {
             var stopWatch = new Stopwatch();
             stopWatch.Start();
             var dict = new Dictionary<string, int>();
 
-            foreach (var item in addList) dict.Add(item.key, item.value);
-            foreach (var item in removeList) dict.Remove(item.key);
-            foreach (var item in addList) dict.ContainsKey(item.key);
+            foreach (var item in addList) dict.Add(item.Key, item.Value);
+            foreach (var item in removeList) dict.Remove(item.Key);
+            foreach (var item in addList) dict.ContainsKey(item.Key);
 
             stopWatch.Stop();
             return stopWatch.Elapsed;

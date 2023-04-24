@@ -11,7 +11,7 @@ namespace HashTableForStudents
         private int _capacity;
         HashMaker<TKey> _hashMaker1, _hashMaker2;
         public int Count { get; private set; }
-        private const double FillFactor = 0.49;
+        private const double FillFactor = 0.70;
         private readonly GetPrimeNumber _primeNumber = new GetPrimeNumber();
 
         public OpenAddressHashTable() 

@@ -12,7 +12,7 @@ namespace AlternativeMicrosoftGenericLibrary
         void Heapify(int index);
 
         void RemoveMax();
-        void FindMax();
+        TItem FindMax();
         int Count { get; }
 
     }

@@ -101,12 +101,15 @@ namespace AlternativeMicrosoftGenericLibrary
 
         public void RemoveMax()
         {
-            throw new NotImplementedException();
+            if (Count == 0) throw new ArgumentException("Heap is Empty!");
+            var temp = _items;
+            _items = new TItem[_capacity];
+            Array.Copy(temp, 1, _items, 0, Count);
         }
 
-        public void FindMax()
+        public TItem FindMax()
         {
-            throw new NotImplementedException();
+            return _items[0];
         }
 
         public IEnumerable<TItem> GetHeapItems()
@@ -115,7 +118,26 @@ namespace AlternativeMicrosoftGenericLibrary
         }
         public static bool IsHeap(IEnumerable<TItem> heap,int childCount)
         {
-            var 
+            throw new ArgumentException("");
         }
+        //public static TItem[] Sort(this Heap<TItem> heap)
+        //{
+        //    var sortedArray = new TItem[heap.Count];
+        //    var count = heap.Count;
+
+        //    while(heap.Count > 0)
+        //    {
+        //        var max = heap.FindMax();
+        //        sortedArray[heap.Count - 1] = max;
+        //        heap.Count--;
+        //        heap.Swap(0, heap.Count);
+        //    }
+
+        //    sortedArray.Reverse();
+
+        //    //потому что испортили для пирамидальной сортировки
+        //    heap.Count = count;
+        //    return sortedArray;
+        //}
     }
 }
