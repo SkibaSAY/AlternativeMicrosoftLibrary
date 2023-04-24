@@ -9,7 +9,6 @@ namespace AlternativeMicrosoftGenericLibrary
     public interface IHeap<TItem>
     {
         void Add(TItem newItem);
-        void Heapify(int index);
 
         void RemoveMax();
         TItem FindMax();

@@ -43,5 +43,21 @@ namespace Heap
             }
         }
 
+        [TestMethod]
+        public void TestSort()
+        {
+            var heap = new Heap<int>(Comparer<int>.Default);
+            var items = new int[] { 1, 5, 2, 17, 18, 7, 6, 2 };
+            foreach (var item in items)
+            {
+                heap.Add(item);
+            }
+            var sortedItems = heap.Sort();
+            Array.Sort(items);
+            for(var i = 0;i < items.Length; i++)
+            {
+                Assert.AreEqual(items[i], sortedItems[i]);
+            }
+        }
     }
 }

@@ -45,13 +45,8 @@ namespace AlternativeMicrosoftGenericLibrary
             _items = tempArr;
         }
 
-        public void Heapify(int index)
+        private void Heapify(int index)
         {
-            if(index < 0 || index >= Count)
-            {
-                throw new ArgumentException("index is outside the heap");
-            }
-
             var isNotRoot = true;
             var current = index;
             while (isNotRoot)
@@ -85,6 +80,7 @@ namespace AlternativeMicrosoftGenericLibrary
                 var child = _items[currChildIndex];
                 if (_comparer.Compare(current, child) == -1)
                 {
+                    current = child;
                     maxValueIndex = currChildIndex;
                 }
             }
@@ -120,24 +116,34 @@ namespace AlternativeMicrosoftGenericLibrary
         {
             throw new ArgumentException("");
         }
-        //public static TItem[] Sort(this Heap<TItem> heap)
-        //{
-        //    var sortedArray = new TItem[heap.Count];
-        //    var count = heap.Count;
 
-        //    while(heap.Count > 0)
-        //    {
-        //        var max = heap.FindMax();
-        //        sortedArray[heap.Count - 1] = max;
-        //        heap.Count--;
-        //        heap.Swap(0, heap.Count);
-        //    }
+        public TItem[] Sort()
+        {
+            var heap = this;
 
-        //    sortedArray.Reverse();
+            var tempItems = new TItem[heap.Count];
+            Array.Copy(_items, tempItems, heap.Count);
 
-        //    //потому что испортили для пирамидальной сортировки
-        //    heap.Count = count;
-        //    return sortedArray;
-        //}
+            var sortedArray = new TItem[heap.Count];
+            var count = heap.Count;
+
+            while (heap.Count > 0)
+            {
+                var max = heap.FindMax();
+                heap.Count--;
+                sortedArray[heap.Count] = max;
+
+                heap.Swap(0, heap.Count);
+                heap.Heapify(0);
+            }
+
+            //sortedArray.Reverse();
+
+            //потому что испортили для пирамидальной сортировки
+            heap.Count = count;
+            _items = tempItems;
+
+            return sortedArray;
+        }
     }
 }
