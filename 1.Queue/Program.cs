@@ -18,7 +18,7 @@ namespace _1.Queue
             //QueueTestPerformance();
             //AvlTreeTestPerformance();
             //HashTestPerformance();
-            HashTableTestPerformance();
+            //HashTableTestPerformance();
             //SkipListTestPerformanceWhereTKeyIsInt();
             //SkipListTestPerformanceWhereTKeyIsIntToString();
         }
