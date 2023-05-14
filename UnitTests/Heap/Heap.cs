@@ -61,6 +61,49 @@ namespace Heap
         }
 
         [TestMethod]
+        public void TestSortSeveralRandom()
+        {
+            var count = 100;
+            for(var i = 0; i < count; i++)
+            {
+                TestSortRandom();
+            }
+        }
+
+        [TestMethod]
+        public void TestSortRandom()
+        {
+            var random = new Random();
+            var selectionSize = 1000;
+            var selection = new List<int>();
+
+            var heapChildsCount = random.Next(2, 2);
+            var heap = new Heap<int>(childsCount: heapChildsCount);
+
+            for(var i = 0; i< selectionSize; i++)
+            {
+                var next = random.Next();
+                selection.Add(next);
+                heap.Add(next);
+            }
+
+            var result = heap.Sort();
+            selection.Sort();
+
+            Assert.AreEqual(selection.Count, result.Count());
+
+            for(var i = 0; i < selection.Count; i++)
+            {
+                var expected = selection[i];
+                var resulting = result[i];
+                Assert.AreEqual(expected, resulting);
+            }
+        }
+
+
+
+        #region SortSeveralSortedLists
+        [TestMethod]
         public void TestSortSeveralSortedLists()
         {
             var severalSortedLists = new List<int[]>{
@@ -77,5 +120,45 @@ namespace Heap
                 Assert.AreEqual(sortedItems[i], result[i]);
             }
         }
+
+        [TestMethod]
+        public void TestSortSeveralSortedLists2()
+        {
+            var severalSortedLists = new List<int[]>{
+                new int[] { 2,51 },
+                new int[] { 1,4,74,79 },
+                new int[] { 1,20,32 },
+            };
+
+            var result = Heap<int>.SortSeveralSortedList(severalSortedLists);
+
+            var sortedItems = severalSortedLists.SelectMany(arr => arr).OrderBy(x => x).ToList();
+            for (var i = 0; i < sortedItems.Count; i++)
+            {
+                Assert.AreEqual(sortedItems[i], result[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestSortSeveralSortedLists_MaxComporator()
+        {
+            var severalSortedLists = new List<int[]>{
+                new int[] { 200,51 },
+                new int[] { 100,40,17,15 },
+                new int[] { 165,20,5,4,3,2,1 },
+            };
+
+            var result = Heap<int>.SortSeveralSortedList(
+                severalSortedLists,
+                Comparer<int>.Create((x,y)=> (-1)*x.CompareTo(y))
+                );
+
+            var sortedItems = severalSortedLists.SelectMany(arr => arr).OrderByDescending(x => x).ToList();
+            for (var i = 0; i < sortedItems.Count; i++)
+            {
+                Assert.AreEqual(sortedItems[i], result[i]);
+            }
+        }
+        #endregion
     }
 }

@@ -33,7 +33,7 @@ namespace AlternativeMicrosoftGenericLibrary
             _items[newIndex] = newItem;
             Count++;
 
-            Heapify(newIndex);
+            HeapifyTop(newIndex);
 
             if (newIndex == _capacity - 1)
             {
@@ -48,7 +48,7 @@ namespace AlternativeMicrosoftGenericLibrary
             _items = tempArr;
         }
 
-        private void Heapify(int index)
+        private void HeapifyTop(int index)
         {
             var isNotRoot = true;
             var current = index;
@@ -59,6 +59,39 @@ namespace AlternativeMicrosoftGenericLibrary
                 current = GetParrentIndex(current);
             }
         }
+
+        private void HeapifyDown(int parrentIndex)
+        {
+
+            var queue = new Queue<int>();
+            queue.Enqueue(parrentIndex);
+            while(queue.Count > 0)
+            {
+                var currentIndex = queue.Dequeue();
+                var hasChange = HeapifyLoop(currentIndex);
+                if (hasChange != -1)
+                {
+                    queue.Enqueue(hasChange);
+                }
+            }
+        }
+
+        private List<int> GetChildIndexes(int parentIndex)
+        {
+            var result = new List<int>();
+            var startIndex = parentIndex * _childsCount;
+            
+            for(var i = 1; i <= _childsCount; i++)
+            {
+                var current = startIndex + i;
+                if (current >= Count)
+                {
+                    break;
+                }
+                result.Add(current);
+            }
+            return result;
+        }
         private int GetParrentIndex(int childIndex)
         {
             return childIndex / _childsCount;
@@ -68,14 +101,14 @@ namespace AlternativeMicrosoftGenericLibrary
         /// Для избавления от рекурсивных вызовов в Heapify
         /// </summary>
         /// <param name="index"></param>
-        private void HeapifyLoop(int index)
+        private int HeapifyLoop(int index)
         {
             var maxValueIndex = index;
             var current = _items[index];
 
             for (var i = 1; i <= _childsCount; i++)
             {
-                var currChildIndex = index * 2 + i;
+                var currChildIndex = index *_childsCount + i;
                 if(currChildIndex >= Count)
                 {
                     break;
@@ -87,8 +120,9 @@ namespace AlternativeMicrosoftGenericLibrary
                     maxValueIndex = currChildIndex;
                 }
             }
-            if (maxValueIndex == index) return;
+            if (maxValueIndex == index) return -1;
             Swap(index, maxValueIndex);
+            return maxValueIndex;
         }
 
         private void Swap(int indexA,int indexB)
@@ -105,8 +139,8 @@ namespace AlternativeMicrosoftGenericLibrary
             var temp = _items;
             _items = new TItem[_capacity];
             Array.Copy(temp, 1, _items, 0, Count);
-            //потому, что мы не знаем
-            Heapify(Count/2);
+
+            this.HeapifyDown(0);
         }
 
         public TItem FindMax()
@@ -140,7 +174,7 @@ namespace AlternativeMicrosoftGenericLibrary
                 sortedArray[heap.Count] = max;
 
                 heap.Swap(0, heap.Count);
-                heap.Heapify(0);
+                heap.HeapifyDown(0);
             }
 
             //sortedArray.Reverse();
