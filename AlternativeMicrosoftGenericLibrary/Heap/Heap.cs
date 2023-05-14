@@ -51,28 +51,25 @@ namespace AlternativeMicrosoftGenericLibrary
         private void HeapifyTop(int index)
         {
             var isNotRoot = true;
-            var current = index;
+            var parent = GetParrentIndex(index);
             while (isNotRoot)
             {
-                if (current == 0) isNotRoot = false;
-                HeapifyLoop(current);
-                current = GetParrentIndex(current);
+                if (parent == 0) isNotRoot = false;
+                HeapifyLoop(parent);
+                parent = GetParrentIndex(parent);
             }
         }
 
         private void HeapifyDown(int parrentIndex)
         {
-
             var queue = new Queue<int>();
             queue.Enqueue(parrentIndex);
             while(queue.Count > 0)
             {
                 var currentIndex = queue.Dequeue();
-                var hasChange = HeapifyLoop(currentIndex);
-                if (hasChange != -1)
-                {
-                    queue.Enqueue(hasChange);
-                }
+                HeapifyLoop(currentIndex);
+                var childs = GetChildIndexes(currentIndex);
+                childs.ForEach(child => queue.Enqueue(child));
             }
         }
 
@@ -94,35 +91,35 @@ namespace AlternativeMicrosoftGenericLibrary
         }
         private int GetParrentIndex(int childIndex)
         {
-            return childIndex / _childsCount;
+            return (childIndex - 1) / _childsCount;
         }
 
         /// <summary>
         /// Для избавления от рекурсивных вызовов в Heapify
         /// </summary>
         /// <param name="index"></param>
+        /// <returns>индекс ,с которым свапнул index</returns>
         private int HeapifyLoop(int index)
         {
-            var maxValueIndex = index;
+            var minValueIndex = index;
             var current = _items[index];
 
-            for (var i = 1; i <= _childsCount; i++)
+            foreach(var childIndex in GetChildIndexes(index))
             {
-                var currChildIndex = index *_childsCount + i;
-                if(currChildIndex >= Count)
+                if(childIndex >= Count)
                 {
                     break;
                 }
-                var child = _items[currChildIndex];
-                if (_comparer.Compare(current, child) == -1)
+                var childItem = _items[childIndex];
+                if (_comparer.Compare(current, childItem) == 1)
                 {
-                    current = child;
-                    maxValueIndex = currChildIndex;
+                    current = childItem;
+                    minValueIndex = childIndex;
                 }
             }
-            if (maxValueIndex == index) return -1;
-            Swap(index, maxValueIndex);
-            return maxValueIndex;
+            if (minValueIndex == index) return -1;
+            Swap(index, minValueIndex);
+            return minValueIndex;
         }
 
         private void Swap(int indexA,int indexB)
@@ -177,7 +174,8 @@ namespace AlternativeMicrosoftGenericLibrary
                 heap.HeapifyDown(0);
             }
 
-            //sortedArray.Reverse();
+            //тк минимум относительно компоратора будет в конце
+            sortedArray = sortedArray.Reverse().ToArray();
 
             //потому что испортили для пирамидальной сортировки
             heap.Count = count;
@@ -201,7 +199,7 @@ namespace AlternativeMicrosoftGenericLibrary
             var heap = new Heap<(TItem value,int arrIndex)>(
                 comparer:Comparer<(TItem value, int arrIndex)>
                 .Create(
-                    (x,y)=> { return (-1)*comparer.Compare(x.value,y.value); } // тк куча максимальная
+                    (x,y)=> { return comparer.Compare(x.value,y.value); }
                     )
                 );
 
@@ -220,9 +218,9 @@ namespace AlternativeMicrosoftGenericLibrary
             while(heap.Count > 0)
             {
                 var current = heap.FindMax();
-                result.Add(current.value);
-
                 heap.RemoveMax();
+
+                result.Add(current.value);
                 var resourse = resourses[current.arrIndex];
                 if(resourse.nextIndex < resourse.arr.Length)
                 {
@@ -231,7 +229,6 @@ namespace AlternativeMicrosoftGenericLibrary
                     heap.Add((newItem, current.arrIndex));
                 }
             }
-
             return result;
         }
     }
