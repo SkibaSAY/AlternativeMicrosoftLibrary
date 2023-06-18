@@ -69,7 +69,7 @@ namespace SkipList
                 prevNode[i].Right = node;
                 if (i == 0) continue;
                 node.Down = prevNode[i - 1].Right;
-                prevNode[i - 1].Right.Up = node;
+                node.Down.Up = node;
             }
             Count++;
         }
