@@ -49,6 +49,7 @@
     <Compile Include="HashTable\Interfaces.cs" />
     <Compile Include="HashTable\KeyValuePair.cs" />
     <Compile Include="HashTable\OpenAddressHashTable.cs" />
+    <Compile Include="QuickSort\QuickSort.cs" />
     <Compile Include="SkipList\Node.cs" />
     <Compile Include="SkipList\SkipList.cs" />
     <Compile Include="_AvlBinaryTree\AvlTree.cs" />

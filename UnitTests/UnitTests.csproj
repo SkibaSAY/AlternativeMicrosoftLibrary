@@ -56,6 +56,7 @@
     <Compile Include="HashTable\Add_Remove.cs" />
     <Compile Include="HashTable\Contains.cs" />
     <Compile Include="Heap\Heap.cs" />
+    <Compile Include="QuickSortExtention\QuickSort.cs" />
     <Compile Include="SkipList\SkipListUnitTest.cs" />
     <Compile Include="SkipList\Add_Remove_Contains.cs" />
     <Compile Include="SkipList\RandomTest.cs" />
